@@ -36,3 +36,6 @@ logs/
 
 # Docker
 .dockerignore
+
+# Worktrees
+.worktrees/
