@@ -14,6 +14,7 @@ function EntryView() {
     metric_1: '',
     metric_2: '',
     metric_3: '',
+    metric_4: '',
     notes: ''
   });
 
@@ -31,6 +32,7 @@ function EntryView() {
         metric_1: prev.metric_1 || lastLog.metric_1 || '',
         metric_2: prev.metric_2 || lastLog.metric_2 || '',
         metric_3: prev.metric_3 || lastLog.metric_3 || '',
+        metric_4: prev.metric_4 || lastLog.metric_4 || '',
         notes: prev.notes || ''
       }));
     }
@@ -58,6 +60,7 @@ function EntryView() {
         metric_1: formData.metric_1,
         metric_2: formData.metric_2,
         metric_3: formData.metric_3,
+        metric_4: formData.metric_4,
         notes: formData.notes
       });
 
@@ -80,13 +83,15 @@ function EntryView() {
 
     switch (exercise.template_type) {
       case 'strength':
-        return { m1: 'Weight (lbs)', m2: 'Reps', m3: 'Sets' };
+        return { m1: 'Weight (lbs)', m2: 'Reps', m3: 'Sets', m4: null };
       case 'cardio':
-        return { m1: 'Distance (mi)', m2: 'Duration (min)', m3: null };
+        return { m1: 'Distance (mi)', m2: 'Duration (min)', m3: null, m4: null };
+      case 'cardio_machine':
+        return { m1: 'Level', m2: 'Incline', m3: 'Duration (min)', m4: 'Calories' };
       case 'timed':
-        return { m1: 'Duration (sec)', m2: null, m3: null };
+        return { m1: 'Duration (sec)', m2: null, m3: null, m4: null };
       case 'bodyweight':
-        return { m1: 'Reps', m2: 'Sets', m3: null };
+        return { m1: 'Reps', m2: 'Sets', m3: null, m4: null };
       default:
         return {};
     }
@@ -100,6 +105,8 @@ function EntryView() {
         return `${log.metric_1} lbs × ${log.metric_2} reps × ${log.metric_3} sets`;
       case 'cardio':
         return `${log.metric_1} mi in ${log.metric_2} min`;
+      case 'cardio_machine':
+        return `Level ${log.metric_1}, Incline ${log.metric_2}, ${log.metric_3} min, ${log.metric_4} cal`;
       case 'timed':
         return `${log.metric_1} seconds`;
       case 'bodyweight':
@@ -173,6 +180,18 @@ function EntryView() {
               inputMode="numeric"
               value={formData.metric_3}
               onChange={(e) => handleChange('metric_3', e.target.value)}
+            />
+          </label>
+        )}
+
+        {labels.m4 && (
+          <label>
+            {labels.m4}
+            <input
+              type="text"
+              inputMode="numeric"
+              value={formData.metric_4}
+              onChange={(e) => handleChange('metric_4', e.target.value)}
             />
           </label>
         )}

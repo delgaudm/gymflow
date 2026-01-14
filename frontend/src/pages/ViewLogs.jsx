@@ -26,6 +26,8 @@ function ViewLogs() {
         return `${log.metric_1 || 0} lbs × ${log.metric_2 || 0} × ${log.metric_3 || 0}`;
       case 'cardio':
         return `${log.metric_1 || 0} mi in ${log.metric_2 || 0} min`;
+      case 'cardio_machine':
+        return `L${log.metric_1 || 0} I${log.metric_2 || 0} ${log.metric_3 || 0}min ${log.metric_4 || 0}cal`;
       case 'timed':
         return `${log.metric_1 || 0} sec`;
       case 'bodyweight':

@@ -64,7 +64,7 @@ router.post('/', (req, res) => {
       });
     }
 
-    const validTypes = ['strength', 'cardio', 'timed', 'bodyweight'];
+    const validTypes = ['strength', 'cardio', 'cardio_machine', 'timed', 'bodyweight'];
     if (!validTypes.includes(template_type)) {
       return res.status(400).json({
         error: `template_type must be one of: ${validTypes.join(', ')}`
@@ -100,7 +100,7 @@ router.put('/:id', (req, res) => {
       values.push(name);
     }
     if (template_type !== undefined) {
-      const validTypes = ['strength', 'cardio', 'timed', 'bodyweight'];
+      const validTypes = ['strength', 'cardio', 'cardio_machine', 'timed', 'bodyweight'];
       if (!validTypes.includes(template_type)) {
         return res.status(400).json({
           error: `template_type must be one of: ${validTypes.join(', ')}`

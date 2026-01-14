@@ -114,6 +114,7 @@ function ManageExercises() {
             >
               <option value="strength">Strength (Weight, Reps, Sets)</option>
               <option value="cardio">Cardio (Distance, Duration)</option>
+              <option value="cardio_machine">Cardio Machine (Level, Incline, Duration, Calories)</option>
               <option value="timed">Timed (Duration only)</option>
               <option value="bodyweight">Bodyweight (Reps, Sets)</option>
             </select>

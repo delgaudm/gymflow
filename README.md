@@ -93,6 +93,7 @@ Outputs to `backend/public/` for serving by Express.
 
 - **strength**: Weight, Reps, Sets
 - **cardio**: Distance, Duration
+- **cardio_machine**: Level, Incline, Duration, Calories
 - **timed**: Duration only
 - **bodyweight**: Reps, Sets
 

@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
     }
 
     const logs = db.prepare(`
-      SELECT id, exercise_id, metric_1, metric_2, metric_3, notes, created_at
+      SELECT id, exercise_id, metric_1, metric_2, metric_3, metric_4, notes, created_at
       FROM logs
       WHERE exercise_id = ?
       ORDER BY created_at DESC
@@ -39,6 +39,7 @@ router.get('/all', (req, res) => {
         l.metric_1,
         l.metric_2,
         l.metric_3,
+        l.metric_4,
         l.notes,
         l.created_at,
         e.name as exercise_name,
@@ -66,7 +67,7 @@ router.get('/all', (req, res) => {
 // POST /api/logs - Create new log and update exercise.last_used_at
 router.post('/', (req, res) => {
   try {
-    const { exercise_id, metric_1, metric_2, metric_3, notes } = req.body;
+    const { exercise_id, metric_1, metric_2, metric_3, metric_4, notes } = req.body;
 
     if (!exercise_id) {
       return res.status(400).json({ error: 'exercise_id is required' });
@@ -76,11 +77,12 @@ router.post('/', (req, res) => {
     const m1 = metric_1 !== undefined && metric_1 !== '' ? parseFloat(metric_1) || null : null;
     const m2 = metric_2 !== undefined && metric_2 !== '' ? parseInt(metric_2) || null : null;
     const m3 = metric_3 !== undefined && metric_3 !== '' ? parseInt(metric_3) || null : null;
+    const m4 = metric_4 !== undefined && metric_4 !== '' ? parseInt(metric_4) || null : null;
 
     // Insert log
     const result = db.prepare(
-      'INSERT INTO logs (exercise_id, metric_1, metric_2, metric_3, notes) VALUES (?, ?, ?, ?, ?)'
-    ).run(exercise_id, m1, m2, m3, notes || null);
+      'INSERT INTO logs (exercise_id, metric_1, metric_2, metric_3, metric_4, notes) VALUES (?, ?, ?, ?, ?, ?)'
+    ).run(exercise_id, m1, m2, m3, m4, notes || null);
 
     // Update exercise.last_used_at
     db.prepare(
@@ -88,7 +90,7 @@ router.post('/', (req, res) => {
     ).run(exercise_id);
 
     const log = db.prepare(`
-      SELECT id, exercise_id, metric_1, metric_2, metric_3, notes, created_at
+      SELECT id, exercise_id, metric_1, metric_2, metric_3, metric_4, notes, created_at
       FROM logs WHERE id = ?
     `).get(result.lastInsertRowid);
 

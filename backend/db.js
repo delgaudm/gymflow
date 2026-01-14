@@ -39,7 +39,7 @@ function initializeDatabase() {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         category_id INTEGER NOT NULL,
         name TEXT NOT NULL,
-        template_type TEXT NOT NULL CHECK(template_type IN ('strength', 'cardio', 'timed', 'bodyweight')),
+        template_type TEXT NOT NULL CHECK(template_type IN ('strength', 'cardio', 'cardio_machine', 'timed', 'bodyweight')),
         last_used_at DATETIME,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
@@ -51,6 +51,7 @@ function initializeDatabase() {
         metric_1 REAL,
         metric_2 INTEGER,
         metric_3 INTEGER,
+        metric_4 INTEGER,
         notes TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (exercise_id) REFERENCES exercises(id) ON DELETE CASCADE
@@ -86,5 +87,58 @@ function initializeDatabase() {
 }
 
 initializeDatabase();
+
+// Run migrations for existing databases
+function runMigrations() {
+  // Migration 1: Add metric_4 column
+  const columnInfo = db.prepare("PRAGMA table_info(logs)").all();
+  const hasMetric4 = columnInfo.some(col => col.name === 'metric_4');
+
+  if (!hasMetric4) {
+    console.log('Running migration: Adding metric_4 column to logs table...');
+    db.exec('ALTER TABLE logs ADD COLUMN metric_4 INTEGER');
+    console.log('Migration complete: metric_4 column added');
+  }
+
+  // Migration 2: Update exercises table constraint to include cardio_machine
+  // Check if table needs migration by inspecting the schema
+  const exercisesSchema = db.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='exercises'").get();
+
+  if (exercisesSchema && !exercisesSchema.sql.includes('cardio_machine')) {
+    console.log('Running migration: Updating exercises table constraint to include cardio_machine...');
+
+    // SQLite doesn't support ALTER TABLE for constraints, so we need to recreate the table
+    db.exec(`
+      -- Create new table with updated constraint
+      CREATE TABLE exercises_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        category_id INTEGER NOT NULL,
+        name TEXT NOT NULL,
+        template_type TEXT NOT NULL CHECK(template_type IN ('strength', 'cardio', 'cardio_machine', 'timed', 'bodyweight')),
+        last_used_at DATETIME,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+      );
+
+      -- Copy data from old table
+      INSERT INTO exercises_new (id, category_id, name, template_type, last_used_at, created_at)
+      SELECT id, category_id, name, template_type, last_used_at, created_at FROM exercises;
+
+      -- Drop old table
+      DROP TABLE exercises;
+
+      -- Rename new table
+      ALTER TABLE exercises_new RENAME TO exercises;
+
+      -- Recreate indexes
+      CREATE INDEX idx_exercises_category ON exercises(category_id);
+      CREATE INDEX idx_exercises_last_used ON exercises(last_used_at DESC);
+    `);
+
+    console.log('Migration complete: exercises table constraint updated');
+  }
+}
+
+runMigrations();
 
 export default db;
