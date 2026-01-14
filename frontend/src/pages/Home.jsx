@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useAPI } from '../hooks/useAPI';
 import CategoryCard from '../components/CategoryCard';
 
@@ -8,7 +9,7 @@ function Home() {
     <main className="container" style={{ maxWidth: '600px', margin: '0 auto' }}>
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1>GymFlow</h1>
-        <a href="/admin" role="button" className="secondary outline">Admin</a>
+        <Link to="/admin" role="button" className="secondary outline">Admin</Link>
       </header>
 
       {loading && <p>Loading...</p>}
