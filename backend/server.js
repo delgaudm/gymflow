@@ -5,6 +5,7 @@ import { dirname, join } from 'path';
 import db from './db.js';
 import categoriesRouter from './routes/categories.js';
 import exercisesRouter from './routes/exercises.js';
+import logsRouter from './routes/logs.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -22,6 +23,7 @@ app.get('/health', (req, res) => {
 // API routes
 app.use('/api/categories', categoriesRouter);
 app.use('/api/exercises', exercisesRouter);
+app.use('/api/logs', logsRouter);
 
 // Serve static frontend (in production)
 const publicPath = join(__dirname, 'public');
