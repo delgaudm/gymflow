@@ -3,21 +3,28 @@ import db from '../db.js';
 
 const router = express.Router();
 
-// GET /api/exercises?category_id=X - Get exercises for category, sorted by last_used_at DESC NULLS LAST
+// GET /api/exercises?category_id=X - Get exercises, optionally filtered by category
 router.get('/', (req, res) => {
   try {
     const { category_id } = req.query;
 
-    if (!category_id) {
-      return res.status(400).json({ error: 'category_id is required' });
+    let exercises;
+    if (category_id) {
+      // Filter by category
+      exercises = db.prepare(`
+        SELECT id, name, template_type, category_id, last_used_at
+        FROM exercises
+        WHERE category_id = ?
+        ORDER BY last_used_at DESC NULLS LAST, created_at DESC
+      `).all(category_id);
+    } else {
+      // Get all exercises
+      exercises = db.prepare(`
+        SELECT id, name, template_type, category_id, last_used_at
+        FROM exercises
+        ORDER BY last_used_at DESC NULLS LAST, created_at DESC
+      `).all();
     }
-
-    const exercises = db.prepare(`
-      SELECT id, name, template_type, category_id, last_used_at
-      FROM exercises
-      WHERE category_id = ?
-      ORDER BY last_used_at DESC NULLS LAST, created_at DESC
-    `).all(category_id);
 
     res.json(exercises);
   } catch (error) {

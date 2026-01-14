@@ -14,18 +14,16 @@ function ManageExercises() {
   });
 
   const exerciseQuery = filterCategoryId === 'all'
-    ? null
+    ? '/api/exercises'
     : `/api/exercises?category_id=${filterCategoryId}`;
 
-  const { data: exercises } = useAPI(exerciseQuery || '/api/categories', [filterCategoryId]);
+  const { data: exercises } = useAPI(exerciseQuery, [filterCategoryId]);
 
-  // Get all exercises across all categories for "all" filter
-  const allExercises = filterCategoryId === 'all' && categories
-    ? categories.flatMap(cat => {
-        const { data } = useAPI(`/api/exercises?category_id=${cat.id}`, [cat.id]) || { data: [] };
-        return (data || []).map(ex => ({ ...ex, category_name: cat.name }));
-      })
-    : exercises || [];
+  // Add category names to exercises
+  const allExercises = (exercises || []).map(ex => {
+    const category = categories?.find(cat => cat.id === ex.category_id);
+    return { ...ex, category_name: category?.name || 'Unknown Category' };
+  });
 
   const handleAdd = async (e) => {
     e.preventDefault();
