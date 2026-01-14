@@ -5,6 +5,7 @@ import EntryView from './pages/EntryView';
 import AdminHome from './pages/AdminHome';
 import ManageCategories from './pages/ManageCategories';
 import ManageExercises from './pages/ManageExercises';
+import ViewLogs from './pages/ViewLogs';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/admin" element={<AdminHome />} />
         <Route path="/admin/categories" element={<ManageCategories />} />
         <Route path="/admin/exercises" element={<ManageExercises />} />
+        <Route path="/admin/logs" element={<ViewLogs />} />
       </Routes>
     </BrowserRouter>
   );
