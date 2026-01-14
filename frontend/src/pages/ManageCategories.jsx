@@ -109,59 +109,98 @@ function ManageCategories() {
       )}
 
       {categories && categories.map((cat, idx) => (
-        <div
-          key={cat.id}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            marginBottom: '0.5rem',
-            padding: '1rem',
-            border: '1px solid #ccc',
-            borderRadius: '0.25rem'
-          }}
-        >
+        <div key={cat.id} style={{ marginBottom: '0.5rem' }}>
           <div
             style={{
-              width: '30px',
-              height: '30px',
-              backgroundColor: cat.color,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '1rem',
+              border: '1px solid #ccc',
               borderRadius: '0.25rem'
             }}
-          />
-          <span style={{ flex: 1 }}>{cat.name}</span>
+          >
+            <div
+              style={{
+                width: '30px',
+                height: '30px',
+                backgroundColor: cat.color,
+                borderRadius: '0.25rem'
+              }}
+            />
+            <span style={{ flex: 1 }}>{cat.name}</span>
 
-          <button
-            onClick={() => handleReorder(cat.id, 'up')}
-            disabled={idx === 0}
-            className="secondary outline"
-            style={{ padding: '0.25rem 0.5rem' }}
-          >
-            ↑
-          </button>
-          <button
-            onClick={() => handleReorder(cat.id, 'down')}
-            disabled={idx === categories.length - 1}
-            className="secondary outline"
-            style={{ padding: '0.25rem 0.5rem' }}
-          >
-            ↓
-          </button>
+            <button
+              onClick={() => handleReorder(cat.id, 'up')}
+              disabled={idx === 0}
+              className="secondary outline"
+              style={{ padding: '0.25rem 0.5rem' }}
+            >
+              ↑
+            </button>
+            <button
+              onClick={() => handleReorder(cat.id, 'down')}
+              disabled={idx === categories.length - 1}
+              className="secondary outline"
+              style={{ padding: '0.25rem 0.5rem' }}
+            >
+              ↓
+            </button>
 
-          <button
-            onClick={() => setEditingId(editingId === cat.id ? null : cat.id)}
-            className="secondary outline"
-            style={{ padding: '0.25rem 0.5rem' }}
-          >
-            Edit
-          </button>
-          <button
-            onClick={() => handleDelete(cat.id, cat.name)}
-            className="secondary"
-            style={{ padding: '0.25rem 0.5rem' }}
-          >
-            ×
-          </button>
+            <button
+              onClick={() => setEditingId(editingId === cat.id ? null : cat.id)}
+              className="secondary outline"
+              style={{ padding: '0.25rem 0.5rem' }}
+            >
+              {editingId === cat.id ? 'Cancel' : 'Edit'}
+            </button>
+            <button
+              onClick={() => handleDelete(cat.id, cat.name)}
+              className="secondary"
+              style={{ padding: '0.25rem 0.5rem' }}
+            >
+              ×
+            </button>
+          </div>
+
+          {editingId === cat.id && (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                handleEdit(cat.id, {
+                  name: formData.get('name'),
+                  color: formData.get('color')
+                });
+              }}
+              style={{
+                marginTop: '0.5rem',
+                padding: '1rem',
+                border: '1px solid #ccc',
+                borderRadius: '0.25rem',
+                backgroundColor: '#f9f9f9'
+              }}
+            >
+              <label>
+                Name
+                <input
+                  type="text"
+                  name="name"
+                  defaultValue={cat.name}
+                  required
+                />
+              </label>
+              <label>
+                Color
+                <input
+                  type="color"
+                  name="color"
+                  defaultValue={cat.color}
+                />
+              </label>
+              <button type="submit">Save Changes</button>
+            </form>
+          )}
         </div>
       ))}
     </main>
