@@ -9,7 +9,7 @@ import ViewLogs from './pages/ViewLogs';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/gym">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/category/:categoryId" element={<CategoryView />} />

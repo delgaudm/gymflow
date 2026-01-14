@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import { copyFileSync } from 'fs';
 
 export default defineConfig({
+  base: '/gym/',
   plugins: [
     react(),
     {
@@ -18,9 +19,10 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      '/api': {
+      '/gym/api': {
         target: 'http://localhost:8080',
-        changeOrigin: true
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/gym/, '')
       }
     }
   },

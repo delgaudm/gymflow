@@ -1,8 +1,8 @@
 const CACHE_NAME = 'gymflow-v2-cache';
 const STATIC_CACHE = [
-  '/',
-  '/index.html',
-  '/manifest.json'
+  '/gym/',
+  '/gym/index.html',
+  '/gym/manifest.json'
 ];
 
 // Install: cache static assets
@@ -36,7 +36,7 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url);
 
   // Network-first for API calls
-  if (url.pathname.startsWith('/api/')) {
+  if (url.pathname.startsWith('/gym/api/')) {
     event.respondWith(
       fetch(request)
         .then((response) => {

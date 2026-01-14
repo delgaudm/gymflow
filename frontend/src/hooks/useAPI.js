@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react';
 
+// Helper to prefix API URLs with base path
+function getApiUrl(url) {
+  return `/gym${url}`;
+}
+
 export function useAPI(url, deps = []) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -12,7 +17,7 @@ export function useAPI(url, deps = []) {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch(url);
+        const response = await fetch(getApiUrl(url));
 
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -43,7 +48,7 @@ export function useAPI(url, deps = []) {
 }
 
 export async function apiPost(url, body) {
-  const response = await fetch(url, {
+  const response = await fetch(getApiUrl(url), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
@@ -57,7 +62,7 @@ export async function apiPost(url, body) {
 }
 
 export async function apiPut(url, body) {
-  const response = await fetch(url, {
+  const response = await fetch(getApiUrl(url), {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
@@ -71,7 +76,7 @@ export async function apiPut(url, body) {
 }
 
 export async function apiDelete(url) {
-  const response = await fetch(url, {
+  const response = await fetch(getApiUrl(url), {
     method: 'DELETE'
   });
 
