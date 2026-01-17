@@ -8,6 +8,7 @@ import ManageExercises from './pages/ManageExercises';
 import ViewLogs from './pages/ViewLogs';
 import Progress from './pages/Progress';
 import DailyWorkout from './pages/DailyWorkout';
+import ExerciseHistory from './pages/ExerciseHistory';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/entry/:exerciseId" element={<EntryView />} />
         <Route path="/progress" element={<Progress />} />
         <Route path="/progress/:date" element={<DailyWorkout />} />
+        <Route path="/progress/exercise/:exerciseId" element={<ExerciseHistory />} />
         <Route path="/admin" element={<AdminHome />} />
         <Route path="/admin/categories" element={<ManageCategories />} />
         <Route path="/admin/exercises" element={<ManageExercises />} />
