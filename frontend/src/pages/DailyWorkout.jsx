@@ -50,6 +50,14 @@ function DailyWorkout() {
     fontSize: '1.1rem',
   };
 
+  const exerciseNameLinkStyle = {
+    ...exerciseNameStyle,
+    textDecoration: 'none',
+    color: 'var(--pico-color)',
+    display: 'block',
+    cursor: 'pointer',
+  };
+
   const exerciseMetricsStyle = {
     color: 'var(--pico-muted-color)',
     fontSize: '0.9rem',
@@ -112,7 +120,14 @@ function DailyWorkout() {
         <div>
           {data.logs.map((log) => (
             <div key={log.id} style={exerciseLogStyle(log.category_color)}>
-              <div style={exerciseNameStyle}>{log.exercise_name}</div>
+              <Link
+                to={`/progress/exercise/${log.exercise_id}`}
+                style={exerciseNameLinkStyle}
+                onMouseEnter={(e) => (e.target.style.textDecoration = 'underline')}
+                onMouseLeave={(e) => (e.target.style.textDecoration = 'none')}
+              >
+                {log.exercise_name}
+              </Link>
               <div style={exerciseMetricsStyle}>
                 {formatMetrics(log.template_type, {
                   metric_1: log.metric_1,
