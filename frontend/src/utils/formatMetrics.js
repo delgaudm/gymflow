@@ -53,3 +53,59 @@ export function formatTime(isoTimestamp) {
   const date = new Date(isoTimestamp);
   return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
 }
+
+// Calculate metric value for trend tracking
+export function calculateTrendMetric(templateType, metrics) {
+  switch (templateType) {
+    case 'strength':
+      return (metrics.metric_1 || 0) * (metrics.metric_2 || 0) * (metrics.metric_3 || 0);
+    case 'bodyweight':
+      return (metrics.metric_1 || 0) * (metrics.metric_2 || 0);
+    case 'cardio':
+      return metrics.metric_1 || 0;
+    case 'cardio_machine':
+      return metrics.metric_4 || 0;
+    case 'timed':
+      return metrics.metric_1 || 0;
+    default:
+      return 0;
+  }
+}
+
+// Get human-readable metric name for trend display
+export function getTrendMetricName(templateType) {
+  switch (templateType) {
+    case 'strength':
+      return 'total volume';
+    case 'bodyweight':
+      return 'total reps';
+    case 'cardio':
+      return 'distance';
+    case 'cardio_machine':
+      return 'calories burned';
+    case 'timed':
+      return 'duration';
+    default:
+      return 'metric';
+  }
+}
+
+// Format trend metric value for display
+export function formatTrendMetric(templateType, value) {
+  if (!value) return 'N/A';
+
+  switch (templateType) {
+    case 'strength':
+      return `${value.toLocaleString()} lbs total`;
+    case 'bodyweight':
+      return `${value} reps total`;
+    case 'cardio':
+      return `${value.toFixed(1)} miles`;
+    case 'cardio_machine':
+      return `${value} calories`;
+    case 'timed':
+      return formatDuration(value);
+    default:
+      return String(value);
+  }
+}
