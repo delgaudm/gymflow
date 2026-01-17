@@ -4,12 +4,33 @@ Minimalist, ultra-fast workout tracker with sub-5-second logging. Self-hosted PW
 
 ## Features
 
+### Core Workout Logging
 - **Three-tap logging**: Home → Category → Exercise → Log (< 5 seconds)
 - **Smart pre-fill**: Form auto-fills from your last workout
 - **Offline-first**: PWA with service worker caching
 - **Zero friction**: No logins, no confirmations, no interruptions
 - **Self-hosted**: Your data stays on your server
 - **Mobile-optimized**: One-thumb navigation, large tap targets
+
+### Progress Analytics
+- **30-day calendar view**: Visual overview of workout consistency
+- **Daily workout reports**: Detailed breakdown of exercises performed each day
+- **Clickable calendar days**: Tap any workout day to see that day's exercises
+- **Navigation**: Browse previous/next days, return to calendar or home
+- **At-a-glance tracking**: Quick understanding of workout patterns
+
+### Exercise Trends (55+ Fitness Focus)
+- **Maintenance-focused tracking**: Designed for injury prevention, not max-outs
+- **Trend indicators**: ↗️ Improving, → Maintaining, ↘️ Declining
+- **Smart calculations**: Based on last 8 vs previous 8 workouts (session-based, not calendar)
+- **Template-aware metrics**:
+  - Strength: Total volume (weight × reps × sets)
+  - Bodyweight: Total reps (reps × sets)
+  - Cardio: Distance covered
+  - Cardio Machine: Calories burned
+  - Timed: Duration
+- **10% threshold**: Celebrates "maintaining" as success, not just improvement
+- **Clickable exercises**: Tap any exercise in daily reports to view its history and trend
 
 ## Tech Stack
 
@@ -99,16 +120,30 @@ Outputs to `backend/public/` for serving by Express.
 
 ### API Endpoints
 
+**Core Logging**:
 - `GET /api/categories` - List categories
 - `GET /api/exercises?category_id=X` - List exercises
 - `GET /api/logs?exercise_id=X` - Recent logs
 - `POST /api/logs` - Create log (updates exercise.last_used_at)
 
+**Progress Analytics**:
+- `GET /api/progress/calendar?days=30` - Get workout calendar data for last N days
+- `GET /api/progress/daily/:date` - Get all logs for a specific date (YYYY-MM-DD)
+
+**Exercise Trends**:
+- `GET /api/exercise/:exerciseId/history` - Get exercise history with trend calculation
+
 See `docs/GymFlow_PRD.md` for complete API specification.
+
+## Navigation
+
+**Hamburger Menu** (☰) - Access from any page:
+- **Progress** - View 30-day calendar and analytics
+- **Admin** - Manage categories, exercises, and logs
 
 ## Admin Features
 
-Access admin panel at http://localhost:8080/admin
+Access admin panel via hamburger menu → Admin
 
 - **Manage Categories**: Add, edit, delete, reorder
 - **Manage Exercises**: Add, edit, delete, filter by category
