@@ -6,6 +6,8 @@ import AdminHome from './pages/AdminHome';
 import ManageCategories from './pages/ManageCategories';
 import ManageExercises from './pages/ManageExercises';
 import ViewLogs from './pages/ViewLogs';
+import Progress from './pages/Progress';
+import DailyWorkout from './pages/DailyWorkout';
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/category/:categoryId" element={<CategoryView />} />
         <Route path="/entry/:exerciseId" element={<EntryView />} />
+        <Route path="/progress" element={<Progress />} />
+        <Route path="/progress/:date" element={<DailyWorkout />} />
         <Route path="/admin" element={<AdminHome />} />
         <Route path="/admin/categories" element={<ManageCategories />} />
         <Route path="/admin/exercises" element={<ManageExercises />} />

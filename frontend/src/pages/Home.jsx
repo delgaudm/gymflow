@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
 import { useAPI } from '../hooks/useAPI';
 import CategoryCard from '../components/CategoryCard';
+import HamburgerMenu from '../components/HamburgerMenu';
 
 function Home() {
   const { data: categories, loading, error } = useAPI('/api/categories');
@@ -9,7 +9,7 @@ function Home() {
     <main className="container" style={{ maxWidth: '600px', margin: '0 auto' }}>
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1>GymFlow</h1>
-        <Link to="/admin" role="button" className="secondary outline">Admin</Link>
+        <HamburgerMenu />
       </header>
 
       {loading && <p>Loading...</p>}
